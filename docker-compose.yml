@@ -1,0 +1,40 @@
+version: '3'
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: config/nginx/Dockerfile
+    volumes:
+      - ./symfony/:/var/www/symfony/
+    ports:
+      - "8081:80"
+    networks:
+      - symfony
+
+  php:
+    build: 
+      context: .
+      dockerfile: config/php/Dockerfile
+    environment:
+      - APP_ENV=dev
+    volumes:
+      - ./symfony/:/var/www/symfony/
+    networks:
+      - symfony
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:14.7-alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "54321:5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    networks:
+      - symfony
+      
+networks:
+  symfony:
