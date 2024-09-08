@@ -4,7 +4,10 @@ namespace App\Repository;
 
 use App\Entity\Category;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<Category>
@@ -39,28 +42,46 @@ class CategoryRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Category[] Returns an array of Category objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return Category[]
+     */
+    public function findAllOrdered(): array
+    {
+        //$dql = "SELECT category FROM App\Entity\Category as category ORDER BY category.name DESC";
+        $qb = $this->createQueryBuilder('c')
+            ->addOrderBy('c.name', 'DESC');
 
-//    public function findOneBySomeField($value): ?Category
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        return $qb->getQuery()->getResult();
+    }
+
+
+    /**
+     * @return Category[]
+     */
+    public function searchByName(string $searchTerm): array
+    {
+        $rsm = new ResultSetMappingBuilder($this->getEntityManager());
+        $rsm->addRootEntityFromClassMetadata(Category::class, 'c');
+
+        $sql = "SELECT * FROM category c WHERE c.name ILIKE :searchTerm ORDER BY c.name DESC";
+        $query = $this->getEntityManager()
+            ->createNativeQuery($sql, $rsm)
+            ->setParameter('searchTerm', '%' . $searchTerm . '%');
+
+        return $query->getResult();
+    }
+
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function findWithFortuneJoins(int $id): ?Category
+    {
+        return $this->createQueryBuilder('c')
+            ->addSelect('fc')
+            ->leftJoin('c.fortuneCookies', 'fc')
+            ->andWhere('c.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

@@ -12,7 +12,7 @@ services:
       - symfony
 
   php:
-    build: 
+    build:
       context: .
       dockerfile: config/php/Dockerfile
     environment:
@@ -35,6 +35,6 @@ services:
       - ./data:/var/lib/postgresql/data
     networks:
       - symfony
-      
+
 networks:
   symfony:
