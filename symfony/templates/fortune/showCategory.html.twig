@@ -13,7 +13,7 @@
                         Fortunes
                     </th>
                     <th class="border p-4">
-                        Print History
+                        Print History ({{ fortunesPrinted|number_format }} total {{ fortunesAverage|number_format }} average)
                     </th>
                 </tr>
             </thead>
@@ -24,7 +24,7 @@
                         {{ fortuneCookie.fortune }}
                     </td>
                     <td class="border p-4">
-                        {{ fortuneCookie.numberPrinted }} printed since {{ fortuneCookie.createdAt|date('M jS Y') }}
+                        {{ fortuneCookie.numberPrinted|number_format }} printed since {{ fortuneCookie.createdAt|date('M jS Y') }}
                     </td>
                 </tr>
             {% endfor %}

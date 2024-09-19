@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\CategoryRepository;
+use App\Repository\FortuneCookieRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,15 +25,23 @@ class FortuneController extends AbstractController
     }
 
     #[Route('/category/{id}', name: 'app_category_show')]
-    public function showCategory(int $id, CategoryRepository $categoryRepository): Response
-    {
+    public function showCategory(
+        int                     $id,
+        CategoryRepository      $categoryRepository,
+        FortuneCookieRepository $fortuneCookieRepository
+    ): Response {
         $category = $categoryRepository->findWithFortuneJoins($id);
         if (!$category) {
             throw $this->createNotFoundException('Category not found!');
         }
 
+        $categoryFortuneStats = $fortuneCookieRepository->countNumberPrintedForCategory($category);
+
         return $this->render('fortune/showCategory.html.twig',[
-            'category' => $category
+            'category' => $category,
+            'fortunesPrinted' => $categoryFortuneStats->getFortunesPrinted(),
+            'fortunesAverage' => $categoryFortuneStats->getFortunesAverage(),
+            'categoryName' => $categoryFortuneStats->getCategoryName(),
         ]);
     }
 }

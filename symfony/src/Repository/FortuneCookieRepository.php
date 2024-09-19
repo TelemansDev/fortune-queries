@@ -2,8 +2,12 @@
 
 namespace App\Repository;
 
+use App\DTO\CategoryFortuneStats;
+use App\Entity\Category;
 use App\Entity\FortuneCookie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -39,28 +43,26 @@ class FortuneCookieRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return FortuneCookie[] Returns an array of FortuneCookie objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('f.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?FortuneCookie
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
+    public function countNumberPrintedForCategory(Category $category): CategoryFortuneStats
+    {
+        return $this->createQueryBuilder('fc')
+            ->select(sprintf(
+                'NEW %s(
+                    SUM(fc.numberPrinted),
+                    AVG(fc.numberPrinted),
+                    c.name
+                )',
+                CategoryFortuneStats::class
+            ))
+            ->join('fc.category', 'c')
+            ->andWhere('fc.category = :category')
+            ->groupBy('c.name')
+            ->setParameter('category', $category)
+            ->getQuery()
+            ->getSingleResult();
+    }
 }
