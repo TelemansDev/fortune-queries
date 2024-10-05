@@ -6,6 +6,7 @@ use App\DTO\CategoryFortuneStats;
 use App\Entity\Category;
 use App\Entity\FortuneCookie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -23,6 +24,12 @@ class FortuneCookieRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, FortuneCookie::class);
+    }
+
+    public static function createFortuneCookiesStillInProductionCriteria(): Criteria
+    {
+        return Criteria::create()
+            ->andWhere(Criteria::expr()->eq('discontinued', false));
     }
 
     public function save(FortuneCookie $entity, bool $flush = false): void
