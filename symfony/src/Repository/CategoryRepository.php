@@ -80,6 +80,7 @@ class CategoryRepository extends ServiceEntityRepository
             ->leftJoin('c.fortuneCookies', 'fc')
             ->andWhere('c.id = :id')
             ->setParameter('id', $id)
+            ->orderBy('RANDOM()')
             ->getQuery()
             ->getOneOrNullResult();
     }

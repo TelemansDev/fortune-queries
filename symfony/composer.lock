@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "72842661a2cd80b365779d14b32035b1",
+    "content-hash": "71359a5d9836989a4d7da2698e10429c",
     "packages": [
         {
             "name": "doctrine/cache",
@@ -1678,6 +1678,56 @@
                 "source": "https://github.com/php-fig/log/tree/3.0.1"
             },
             "time": "2024-08-21T13:31:24+00:00"
+        },
+        {
+            "name": "qbbr/pgsql-doctrine-random-function",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/qbbr/PgsqlDoctrineRandomFunction.git",
+                "reference": "cf2e10ae9a9c3b7c83d586c6a3de40dfca2c89ec"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/qbbr/PgsqlDoctrineRandomFunction/zipball/cf2e10ae9a9c3b7c83d586c6a3de40dfca2c89ec",
+                "reference": "cf2e10ae9a9c3b7c83d586c6a3de40dfca2c89ec",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/orm": ">=2.2.0"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Qbbr\\PgsqlDoctrineRandomFunction\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sokolov Innokenty",
+                    "homepage": "https://github.com/qbbr"
+                }
+            ],
+            "description": "PostgreSQL RANDOM() function for Doctrine ORM",
+            "homepage": "https://github.com/qbbr/PgsqlDoctrineRandomFunction",
+            "keywords": [
+                "doctrine",
+                "function",
+                "pgsql",
+                "postgresql",
+                "qbbr",
+                "random",
+                "symfony"
+            ],
+            "support": {
+                "issues": "https://github.com/qbbr/PgsqlDoctrineRandomFunction/issues",
+                "source": "https://github.com/qbbr/PgsqlDoctrineRandomFunction/tree/master"
+            },
+            "time": "2016-03-12T11:10:05+00:00"
         },
         {
             "name": "symfony/asset",
